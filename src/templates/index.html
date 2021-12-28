@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}
+    Home page
+{% endblock title %}
+{% block content %}
+    <h3 class="main-article-title">Good Morning
+        {% if myname and myname!="Christos" %}
+            {{ myname }}
+        {% elif myname=="Christos" %}
+            administrator
+        {% else %}
+            to you
+        {% endif %}
+    </h3>
+{% endblock content %}
+ 

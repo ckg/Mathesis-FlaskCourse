@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}
+    Books
+{% endblock title %}
+{% block content %}
+    <h3 class='main-article-title'>The books</h3>
+    <ul>
+    {% for book in jlist %}
+        <li >
+        {# with | we apply jinja filters like safe, title, etc. #}
+        Title: {{ book.Title | title }}<br>
+        Author: {{ book.Author | safe }} <br>
+        Genre: {{ book.Genre }} <br>
+        </li> <br>
+    {% endfor %}
+    </ul>
+
+    <h3>The novel list</h3>
+    <ul>
+        {% for book in jlist %}
+            {% if book.Genre == "Novel" %}
+                <li>
+                Title: {{ book.Title }} <br>
+                Author: {{ book.Author }} <br>
+                Genre: {{ book.Genre }} <br>
+                </li> <br>
+            {% endif %}
+        {% endfor %}
+        </ul>
+
+    <h3>The whole list</h3>
+    {{ jlist }}
+{% endblock content %}
