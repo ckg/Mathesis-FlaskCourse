@@ -3,6 +3,99 @@
     Signup
 {% endblock title %}
 {% block content %}
-    <h3>Signup page</h3>
+    
+    <div class="container login-container">
+        <div class="row">
+            <div class="col-md-6 login-form-1">
+
+                <h3>Σελίδα Εγγραφής</h3>
+                
+                <form action="#" method="POST">
+                    <div class="mb-3">
+
+                        <input type="text" class="form-control"
+                        placeholder="username" name="username"
+                        aria-label="username" aria-describedby="basic-addon1">
+
+                        <div id="usernameHelp" class="form-text">
+                            Παρακαλώ δώστε username
+                        </div>
+                        <!-- <ul class="errors">
+                                <li class"alert text-danger">
+
+                                </li>
+                              </ul> -->
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <input type="text" class="form-control"
+                        placeholder="email" name="email"
+                        aria-label="email" aria-describedby="basic-addon1">
+
+                        <div id="emailHelp" class="form-text">
+                            Παρακαλώ δώστε email
+                        </div>
+                        <!-- <ul class="errors">
+                                <li class"alert text-danger">
+
+                                </li>
+                              </ul> -->
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <input type="password" class="form-control"
+                        placeholder="password" name="password"
+                        aria-label="password" aria-describedby="basic-addon1">
+
+                        <div id="passwordHelp" class="form-text">
+                            Παρακαλώ δώστε password
+                        </div>
+                        <!-- <ul class="errors">
+                                <li class"alert text-danger">
+
+                                </li>
+                              </ul> -->
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <input type="password" class="form-control"
+                        placeholder="Επιβεβαίωση password" name="password2"
+                        aria-label="password2" aria-describedby="basic-addon1">
+
+                        <div id="password2Help" class="form-text">
+                            Παρακαλώ επιβεβαιώστε το password
+                        </div>
+                        <!-- <ul class="errors">
+                                <li class"alert text-danger">
+
+                                </li>
+                              </ul> -->
+
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">
+                            Αποστολή
+                        </button>
+                    </div>
+
+
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
 {% endblock content %}
  
