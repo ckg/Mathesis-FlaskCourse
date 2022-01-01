@@ -13,76 +13,86 @@
                 <form action="#" method="POST">
                     <div class="mb-3">
 
-                        <input type="text" class="form-control"
-                        placeholder="username" name="username"
-                        aria-label="username" aria-describedby="basic-addon1">
+                        {{ form.username.label(class="form-label") }}
+                        {{ form.username(class="form-control") }}
 
                         <div id="usernameHelp" class="form-text">
                             Παρακαλώ δώστε username
                         </div>
-                        <!-- <ul class="errors">
-                                <li class"alert text-danger">
-
-                                </li>
-                              </ul> -->
+                        {% if form.username.errors %}
+                            <ul class="errors">
+                                {% for error in form.username.errors %}
+                                    <li class"alert text-danger">
+                                        {{ error }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
 
                     </div>
 
                     <div class="mb-3">
 
-                        <input type="text" class="form-control"
-                        placeholder="email" name="email"
-                        aria-label="email" aria-describedby="basic-addon1">
+                        {{ form.email.label(class="form-label") }}
+                        {{ form.email(class="form-control") }}
 
                         <div id="emailHelp" class="form-text">
                             Παρακαλώ δώστε email
                         </div>
-                        <!-- <ul class="errors">
-                                <li class"alert text-danger">
-
-                                </li>
-                              </ul> -->
+                        {% if form.email.errors %}
+                            <ul class="errors">
+                                {% for error in form.email.errors %}
+                                    <li class"alert text-danger">
+                                        {{ error }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
 
                     </div>
 
                     <div class="mb-3">
 
-                        <input type="password" class="form-control"
-                        placeholder="password" name="password"
-                        aria-label="password" aria-describedby="basic-addon1">
+                        {{ form.password.label(class="form-label") }}
+                        {{ form.password(class="form-control") }}
 
                         <div id="passwordHelp" class="form-text">
                             Παρακαλώ δώστε password
                         </div>
-                        <!-- <ul class="errors">
-                                <li class"alert text-danger">
-
-                                </li>
-                              </ul> -->
+                        {% if form.password.errors %}
+                            <ul class="errors">
+                                {% for error in form.password.errors %}
+                                    <li class"alert text-danger">
+                                        {{ error }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
 
                     </div>
 
                     <div class="mb-3">
 
-                        <input type="password" class="form-control"
-                        placeholder="Επιβεβαίωση password" name="password2"
-                        aria-label="password2" aria-describedby="basic-addon1">
+                        {{ form.password2.label(class="form-label") }}
+                        {{ form.password2(class="form-control") }}
 
                         <div id="password2Help" class="form-text">
                             Παρακαλώ επιβεβαιώστε το password
                         </div>
-                        <!-- <ul class="errors">
-                                <li class"alert text-danger">
+                        {% if form.password2.errors %}
+                            <ul class="errors">
+                                {% for error in form.password2.errors %}
+                                    <li class"alert text-danger">
+                                        {{ error }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
 
-                                </li>
-                              </ul> -->
-
-                    </div>
+                    </div>                
 
                     <div class="mb-3">
-                        <button type="submit" class="btn btn-primary">
-                            Αποστολή
-                        </button>
+                        {{ form.submit(class="btn btn-primary") }}
                     </div>
 
 

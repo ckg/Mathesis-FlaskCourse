@@ -4,9 +4,10 @@ from flask import (Flask,
                     url_for,
                     request
                     )
-import json
+from forms import SignupForm
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = '123'
 
 @app.route ("/index/")
 @app.route ("/")
@@ -15,14 +16,17 @@ def root():
 
 @app.route("/signup/", methods=["GET", "POST"])
 def signup():
-    if request.method == "POST": #we should check the method of request
-        username = request.form["username"]
-        email = request.form["email"]
-        password = request.form["password"]
-        password2 = request.form["password2"]
+
+    form = SignupForm()
+    #we should check the method of request
+    if request.method == "POST": #and form.validate_on_submit(): 
+        username = form.username.data
+        email = form.email.data
+        password = form.password.data
+        password2 = form.password2.data
         print(username, email, password, password2)
  
-    return render_template("signup.html")
+    return render_template("signup.html", form=form)
 
 @app.route("/login/")
 def login():
