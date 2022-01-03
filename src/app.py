@@ -19,7 +19,7 @@ def signup():
 
     form = SignupForm()
     #we should check the method of request
-    if request.method == "POST": #and form.validate_on_submit(): 
+    if request.method == "POST" and form.validate_on_submit(): 
         username = form.username.data
         email = form.email.data
         password = form.password.data

@@ -13,6 +13,10 @@
                 <form action="#" method="POST">
                     <div class="mb-3">
 
+                        <!-- to use CSRF token ('SECRET_KEY') use one of the two ways-->
+                        <!-- {{ form.hidden_tag() }} --> 
+                        {{ form.csrf_token() }}
+
                         {{ form.username.label(class="form-label") }}
                         {{ form.username(class="form-control") }}
 
