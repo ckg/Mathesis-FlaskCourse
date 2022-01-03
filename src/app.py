@@ -7,7 +7,11 @@ from flask import (Flask,
 from forms import SignupForm
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '123'
+#for random key generation we could use 
+#the following libray:
+import secrets
+secret_key = secrets.token_hex(16)
+app.config['SECRET_KEY'] = secret_key
 
 @app.route ("/index/")
 @app.route ("/")
