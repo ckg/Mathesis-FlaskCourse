@@ -19,7 +19,7 @@
                     <div class="mb-3">
 
                         {{ form.username.label(class="form-label") }}
-                        {{ form.username(class="form-control") }}
+                        {{ form.username(class="form-control", required=False) }}
 
                         <div id="usernameHelp" class="form-text">
                             Παρακαλώ δώστε username
@@ -39,7 +39,7 @@
                     <div class="mb-3">
 
                         {{ form.email.label(class="form-label") }}
-                        {{ form.email(class="form-control") }}
+                        {{ form.email(class="form-control", required=False) }}
 
                         <div id="emailHelp" class="form-text">
                             Παρακαλώ δώστε email
@@ -59,7 +59,7 @@
                     <div class="mb-3">
 
                         {{ form.password.label(class="form-label") }}
-                        {{ form.password(class="form-control") }}
+                        {{ form.password(class="form-control", type="password", required=False) }}
 
                         <div id="passwordHelp" class="form-text">
                             Παρακαλώ δώστε password
@@ -79,7 +79,7 @@
                     <div class="mb-3">
 
                         {{ form.password2.label(class="form-label") }}
-                        {{ form.password2(class="form-control") }}
+                        {{ form.password2(class="form-control", type="password", required=False) }}
 
                         <div id="password2Help" class="form-text">
                             Παρακαλώ επιβεβαιώστε το password

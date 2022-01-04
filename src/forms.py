@@ -34,3 +34,20 @@ class SignupForm(FlaskForm):
                             )
 
     submit = SubmitField(label="Εγγραφή")
+
+class LoginForm(FlaskForm):
+    
+    email = StringField(label="email",
+                         validators=[
+                               DataRequired(message="Αυτό το πεδίο δεν μπορεί να είναι κενό"), 
+                               Email(message="Παρακαλώ εισάγετε ένα σωστό email")
+                          ]
+                        )
+
+    password = StringField(label="password",
+                            validators=[
+                               DataRequired(message="Αυτό το πεδίο δεν μπορεί να είναι κενό")  
+                            ] 
+                           )
+
+    submit = SubmitField(label="Είσοδος")
