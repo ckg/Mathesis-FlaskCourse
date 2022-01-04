@@ -4,7 +4,7 @@ from flask import (Flask,
                     url_for,
                     request
                     )
-from forms import SignupForm, LoginForm
+from forms import SignupForm, LoginForm, NewArticleForm
 
 app = Flask(__name__)
 #for random key generation we could use 
@@ -46,9 +46,15 @@ def login():
 def logout():
     return redirect(url_for("root")) #we call the method name in url
 
-@app.route("/new_article/")
+@app.route("/new_article/", methods=["GET", "POST"])
 def new_article():
-    return render_template("new_article.html")
+    form = NewArticleForm()
+    #we should check the method of request
+    if request.method == "POST" and form.validate_on_submit(): 
+        article_title = form.article_title.data
+        article_body = form.article_body.data
+        print(article_title, article_body)
+    return render_template("new_article.html", form=form)
 
 
 
