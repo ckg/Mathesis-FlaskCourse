@@ -1,8 +1,6 @@
-from flask import (Flask, 
-                    render_template, 
-                    redirect, 
-                    url_for,
-                    request
+from flask import (Flask, render_template, 
+                    redirect, url_for,
+                    request, flash
                     )
 from forms import SignupForm, LoginForm, NewArticleForm
 
@@ -40,6 +38,9 @@ def login():
         email = form.email.data
         password = form.password.data
         print(email, password)
+
+        flash(f"Η είσοδος του χρήστη {email} έγινε με επιτυχία", "success") # the 'success' is used for defining the category of message 
+
     return render_template("login.html", form=form)
 
 @app.route("/logout/")
