@@ -1,20 +1,9 @@
-from flask import (Flask, render_template, 
+from flask import (render_template, 
                     redirect, url_for,
                     request, flash
                     )
-from forms import SignupForm, LoginForm, NewArticleForm
-#for random key generation we could use 
-#the following libray:
-import secrets
-
-app = Flask(__name__)
-
-secret_key_general = secrets.token_hex(16) #for general lock use 
-secret_key_wtf = secrets.token_hex(16) #for use exclusive on wtf forms
-app.config['SECRET_KEY'] = secret_key_general
-app.config['WTF_CSRF_SECRET_KEY'] = secret_key_wtf
-
-
+from FlaskBlogApp.forms import SignupForm, LoginForm, NewArticleForm
+from FlaskBlogApp import app
 
 @app.route ("/index/")
 @app.route ("/")
@@ -61,10 +50,3 @@ def new_article():
         article_body = form.article_body.data
         print(article_title, article_body)
     return render_template("new_article.html", form=form)
-
-
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
