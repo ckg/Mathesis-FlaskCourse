@@ -3,13 +3,18 @@ from flask import (Flask, render_template,
                     request, flash
                     )
 from forms import SignupForm, LoginForm, NewArticleForm
-
-app = Flask(__name__)
 #for random key generation we could use 
 #the following libray:
 import secrets
-secret_key = secrets.token_hex(16)
-app.config['SECRET_KEY'] = secret_key
+
+app = Flask(__name__)
+
+secret_key_general = secrets.token_hex(16) #for general lock use 
+secret_key_wtf = secrets.token_hex(16) #for use exclusive on wtf forms
+app.config['SECRET_KEY'] = secret_key_general
+app.config['WTF_CSRF_SECRET_KEY'] = secret_key_wtf
+
+
 
 @app.route ("/index/")
 @app.route ("/")
