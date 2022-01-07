@@ -9,7 +9,7 @@
           <h3>Εισαγωγή Νέου Άρθρου</h3>
   
           <form method="POST">
-            {{ form.csrf_token() }}
+            {{ form.csrf_token }}
   
             <div class="mb-3">
               {{ form.article_title.label(class="form-label") }}
