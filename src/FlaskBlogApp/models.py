@@ -17,7 +17,7 @@ class Article(db.Model):
     article_title = db.Column(db.String(50), nullable=False)
     article_body = db.Column(db.Text(), nullable=False)
     article_image = db.Column(db.String(30), default='default_article_image.jpg', nullable=False)
-    date_created = db.Column(db.DateTime, default='datetime.utcnow', nullable=False)
+    date_created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) # user.id of the table not of the class
 
     def __repr__(self):

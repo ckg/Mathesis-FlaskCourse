@@ -22,4 +22,4 @@ db = SQLAlchemy(app)
 # we must import routes here, after the app initialization 
 # and we must do the import of routes because otherwise 
 # there is nothing to call the routes
-from FlaskBlogApp import routes
+from FlaskBlogApp import routes, models
