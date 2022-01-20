@@ -3,6 +3,7 @@ from flask import Flask
 # the following libray:
 import secrets
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
 
@@ -18,6 +19,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Connect application with the database
 db = SQLAlchemy(app)
+# Connect hash tool with our app
+bcrypt = Bcrypt(app)
 
 # we must import routes here, after the app initialization 
 # and we must do the import of routes because otherwise 
