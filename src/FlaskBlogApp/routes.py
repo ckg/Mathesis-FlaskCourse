@@ -3,12 +3,14 @@ from flask import (render_template,
                     request, flash
                     )
 from FlaskBlogApp.forms import SignupForm, LoginForm, NewArticleForm
-from FlaskBlogApp import app
+from FlaskBlogApp import app, db
+from FlaskBlogApp.models import User, Article
 
 @app.route ("/index/")
 @app.route ("/")
 def root():
-    return render_template("index.html")
+    articles = Article.query.all()
+    return render_template("index.html", articles=articles)
 
 @app.route("/signup/", methods=["GET", "POST"])
 def signup():

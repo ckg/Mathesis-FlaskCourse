@@ -3,6 +3,18 @@
     Home page
 {% endblock title %}
 {% block content %}
-    <h3>Home page</h3>
+    {% if articles %}
+    <ul>
+        {% for article in articles %}
+        <li>
+            [ {{ article.date_created.strftime('%d-%m-%Y') }} ]<br>
+            {{ article.article_title }}<br>
+            {{ article.article_body | truncate(255) }}<br> <!-- jinja filter truncate to cut the size of article body-->
+            {{ article.author.username }}<br>
+        </li>
+        {% endfor %}
+            
+    </ul>
+    {% endif %}
 {% endblock content %}
  
