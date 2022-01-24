@@ -1,6 +1,6 @@
 from flask import (render_template, 
                     redirect, url_for,
-                    request, flash
+                    request, flash, session
                     )
 from FlaskBlogApp.forms import SignupForm, LoginForm, NewArticleForm
 from FlaskBlogApp import app, db, bcrypt
@@ -9,8 +9,11 @@ from FlaskBlogApp.models import User, Article
 @app.route ("/index/")
 @app.route ("/")
 def root():
+    user = None
+    if "user" in session:
+        user = session["user"]
     articles = Article.query.all()
-    return render_template("index.html", articles=articles)
+    return render_template("index.html", articles=articles, myuser = user)
 
 @app.route("/signup/", methods=["GET", "POST"])
 def signup():
@@ -48,9 +51,19 @@ def login():
     if request.method == "POST" and form.validate_on_submit(): 
         email = form.email.data
         password = form.password.data
-        print(email, password)
+        
+        #Instanciate a user using models
+        user = User.query.filter_by(email=email).first()
+        if user and bcrypt.check_password_hash(user.password, password):
+            session['user'] = user.username #make login using session
+            flash(f"Η είσοδος του χρήστη με email {user.email} έγινε με επιτυχία", "success") # the 'success' is used for defining the category of message
+            # Since login is succesfull we redirect the user
+            return redirect(url_for("root"))
+        else:
+            flash(f"Η είσοδος του χρήστη απέτυχε", "warning")
+        #print(email, password)
 
-        flash(f"Η είσοδος του χρήστη {email} έγινε με επιτυχία", "success") # the 'success' is used for defining the category of message 
+         
 
     return render_template("login.html", form=form)
 
