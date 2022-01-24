@@ -55,7 +55,12 @@ def login():
         #Instanciate a user using models
         user = User.query.filter_by(email=email).first()
         if user and bcrypt.check_password_hash(user.password, password):
-            session['user'] = user.username #make login using session
+            #make login using session
+            #and pass a dictionary
+            session['user'] = {"username": user.username,
+                                "email": user.email,
+                                "profile_image": user.profile_image,
+                                "id": user.id}
             flash(f"Η είσοδος του χρήστη με email {user.email} έγινε με επιτυχία", "success") # the 'success' is used for defining the category of message
             # Since login is succesfull we redirect the user
             return redirect(url_for("root"))
@@ -69,6 +74,7 @@ def login():
 
 @app.route("/logout/")
 def logout():
+    session.pop("user", None)
     return redirect(url_for("root")) #we call the method name in url
 
 @app.route("/new_article/", methods=["GET", "POST"])

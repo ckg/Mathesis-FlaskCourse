@@ -4,7 +4,7 @@
 {% endblock title %}
 {% block content %}
 
-{{ myuser}}
+{{ myuser.email }} : {{ myuser.id}} <!--How to take session's values-->
     {% if articles %}
     <ul>
         {% for article in articles %}
