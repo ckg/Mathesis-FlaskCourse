@@ -46,6 +46,7 @@ def signup():
 
 @app.route("/login/", methods=["GET", "POST"])
 def login():
+    session.permanent = True #activate permanent sessions
     form = LoginForm()
     #we should check the method of request
     if request.method == "POST" and form.validate_on_submit(): 
@@ -79,10 +80,31 @@ def logout():
 
 @app.route("/new_article/", methods=["GET", "POST"])
 def new_article():
-    form = NewArticleForm()
-    #we should check the method of request
-    if request.method == "POST" and form.validate_on_submit(): 
-        article_title = form.article_title.data
-        article_body = form.article_body.data
-        print(article_title, article_body)
-    return render_template("new_article.html", form=form)
+    user = None
+    if "user" in session:
+        user = session["user"]
+
+        form = NewArticleForm()
+        #we should check the method of request
+        if request.method == "POST" and form.validate_on_submit(): 
+            article_title = form.article_title.data
+            article_body = form.article_body.data
+            print(article_title, article_body)
+
+            #Instanciate an article using models
+            article= Article(article_title=article_title,
+                            article_body=article_body,
+                            user_id=user.get("id")
+                            )
+            #add article to database
+            db.session.add(article)
+            #commit changes to database
+            db.session.commit()
+            
+            username = user.get("username")
+            flash(f"Το άρθρο του χρήστη <b>{username}</b> δημιουργήθηκε με επιτυχία", "success")
+
+        return render_template("new_article.html", form=form)
+    else:
+        flash("Για να δείτε αυτή την σελίδα πρέπει να έχετε συνδεθεί", "warning")
+        return redirect(url_for("root"))

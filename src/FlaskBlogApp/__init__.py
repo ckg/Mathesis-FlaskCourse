@@ -4,6 +4,7 @@ from flask import Flask
 import secrets
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from datetime import timedelta
 
 app = Flask(__name__)
 
@@ -11,6 +12,8 @@ secret_key_general = secrets.token_hex(16) #for general lock use
 secret_key_wtf = secrets.token_hex(16) #for use exclusive on wtf forms
 app.config['SECRET_KEY'] = secret_key_general
 app.config['WTF_CSRF_SECRET_KEY'] = secret_key_wtf
+#To activate permanent sessions
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
 
 # Database URI configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flask_course_database.db'
