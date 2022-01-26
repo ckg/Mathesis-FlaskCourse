@@ -3,6 +3,11 @@
     Home page
 {% endblock title %}
 {% block content %}
+
+    {% if current_user.is_authenticated %}
+        {{ current_user }}
+    {% endif %}
+
     {% if articles %}
     <ul>
         {% for article in articles %}

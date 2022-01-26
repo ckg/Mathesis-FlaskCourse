@@ -5,6 +5,7 @@ from flask import (render_template,
 from FlaskBlogApp.forms import SignupForm, LoginForm, NewArticleForm
 from FlaskBlogApp import app, db, bcrypt
 from FlaskBlogApp.models import User, Article
+from flask_login import login_user, current_user, logout_user
 
 @app.route ("/index/")
 @app.route ("/")
@@ -43,22 +44,37 @@ def signup():
 
 @app.route("/login/", methods=["GET", "POST"])
 def login():
+
+    if current_user.is_authenticated:
+        return redirect(url_for('root'))
     form = LoginForm()
+
     #we should check the method of request
     if request.method == "POST" and form.validate_on_submit(): 
         email = form.email.data
         password = form.password.data
-        print(email, password)
+        #print(email, password)
 
-        flash(f"Η είσοδος του χρήστη {email} έγινε με επιτυχία", "success") # the 'success' is used for defining the category of message 
+        user = User.query.filter_by(email=email).first()
+        if user and bcrypt.check_password_hash(user.password, password):
+            flash(f"Η είσοδος του χρήστη {email} έγινε με επιτυχία", "success") # the 'success' is used for defining the category of message 
+            login_user(user)
+            return redirect(url_for('root'))
+        else:
+            flash(f"Η είσοδος του χρήστη με email {email} ήταν ανεπιτυχής", "warning")
+
 
     return render_template("login.html", form=form)
 
 @app.route("/logout/")
 def logout():
+    logout_user()
+    flash("Έγινε αποσύνδεση του χρήστη", "success")
+
     return redirect(url_for("root")) #we call the method name in url
 
 @app.route("/new_article/", methods=["GET", "POST"])
+
 def new_article():
     form = NewArticleForm()
     #we should check the method of request

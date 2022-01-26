@@ -4,6 +4,7 @@ from flask import Flask
 import secrets
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
 
 app = Flask(__name__)
 
@@ -21,6 +22,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 # Connect hash tool with our app
 bcrypt = Bcrypt(app)
+# Create an instance of LoginManager
+#login_manager = LoginManager()
+# Connect LoginManager with our app
+#login_manager.init_app(app)
+# Create and connect LoginManager with our app
+login_manager = LoginManager(app)
 
 # we must import routes here, after the app initialization 
 # and we must do the import of routes because otherwise 
