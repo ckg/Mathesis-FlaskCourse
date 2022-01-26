@@ -5,6 +5,7 @@ import secrets
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from datetime import timedelta
 
 app = Flask(__name__)
 
@@ -17,6 +18,7 @@ app.config['WTF_CSRF_SECRET_KEY'] = secret_key_wtf
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flask_course_database.db'
 # Disable modification warnings
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['REMEMBER_COOKIE_DURATION'] = timedelta(minutes=10)
 
 # Connect application with the database
 db = SQLAlchemy(app)
@@ -28,6 +30,11 @@ bcrypt = Bcrypt(app)
 #login_manager.init_app(app)
 # Create and connect LoginManager with our app
 login_manager = LoginManager(app)
+# redirect us to login page whenever we call a login_required page
+login_manager.login_view = "login"
+# To change the message
+login_manager.login_message_category = "warning"
+login_manager.login_message = "Παρακαλoύμε κάντε login για να δείτε αυτή τη σελίδα"
 
 # we must import routes here, after the app initialization 
 # and we must do the import of routes because otherwise 

@@ -5,7 +5,7 @@ from flask import (render_template,
 from FlaskBlogApp.forms import SignupForm, LoginForm, NewArticleForm
 from FlaskBlogApp import app, db, bcrypt
 from FlaskBlogApp.models import User, Article
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 
 @app.route ("/index/")
 @app.route ("/")
@@ -58,8 +58,9 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user and bcrypt.check_password_hash(user.password, password):
             flash(f"Η είσοδος του χρήστη {email} έγινε με επιτυχία", "success") # the 'success' is used for defining the category of message 
-            login_user(user)
-            return redirect(url_for('root'))
+            login_user(user, remember=form.remember_me.data) # remember set for remembering the user session
+            next_link = request.args.get("next") # we get the link of the page we asked before transered to login
+            return redirect(next_link) if next_link else redirect(url_for('root'))
         else:
             flash(f"Η είσοδος του χρήστη με email {email} ήταν ανεπιτυχής", "warning")
 
@@ -74,7 +75,7 @@ def logout():
     return redirect(url_for("root")) #we call the method name in url
 
 @app.route("/new_article/", methods=["GET", "POST"])
-
+@login_required # User must login to see this page
 def new_article():
     form = NewArticleForm()
     #we should check the method of request
