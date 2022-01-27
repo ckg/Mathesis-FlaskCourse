@@ -2,7 +2,7 @@ from flask import (render_template,
                     redirect, url_for,
                     request, flash
                     )
-from FlaskBlogApp.forms import SignupForm, LoginForm, NewArticleForm
+from FlaskBlogApp.forms import SignupForm, LoginForm, NewArticleForm, AccountUpdateForm
 from FlaskBlogApp import app, db, bcrypt
 from FlaskBlogApp.models import User, Article
 from flask_login import login_user, current_user, logout_user, login_required
@@ -84,3 +84,24 @@ def new_article():
         article_body = form.article_body.data
         print(article_title, article_body)
     return render_template("new_article.html", form=form)
+
+@app.route("/account/", methods=["GET", "POST"])
+@login_required # User must login to see this page
+def account():
+     # Pre-filling the fields with the current's user data
+    form = AccountUpdateForm(username=current_user.username, email=current_user.email)
+    # or another way of Pre-filling the fields with the current's user data
+    #form.username.data = current_user.username
+    #form.email.data = current_user.email
+    if request.method == "POST" and form.validate_on_submit(): 
+        # using current user we can commit to the database without adding the user
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+
+        db.session.commit()
+
+        flash(f"Ο λογαριασμός του χρήστη <b>{current_user.username}</b> ενημερώθηκε με επιτυχία", "success")
+
+        return redirect(url_for('root'))
+    
+    return render_template("account_update.html", form=form)
