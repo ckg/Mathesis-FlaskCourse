@@ -1,6 +1,6 @@
 from flask import (render_template, 
                     redirect, url_for,
-                    request, flash
+                    request, flash, abort
                     )
 from FlaskBlogApp.forms import SignupForm, LoginForm, NewArticleForm, AccountUpdateForm
 from FlaskBlogApp import app, db, bcrypt
@@ -82,7 +82,20 @@ def new_article():
     if request.method == "POST" and form.validate_on_submit(): 
         article_title = form.article_title.data
         article_body = form.article_body.data
-        print(article_title, article_body)
+        #print(article_title, article_body)
+
+        #Instanciate an article using models
+        article = Article(article_title=article_title,
+                         article_body=article_body,
+                         author=current_user
+                         ) # We pass the whole user object to the author backreference but another way could be user_id=current_user.id
+        #add aricle to database
+        db.session.add(article)
+        #commit changes to database
+        db.session.commit()
+        flash(f"Το άρθρο με τίτλο {article.article_title} δημιουργήθηκε με επιτυχία", "success")
+        return redirect(url_for('root'))
+
     return render_template("new_article.html", form=form)
 
 @app.route("/account/", methods=["GET", "POST"])
@@ -105,3 +118,33 @@ def account():
         return redirect(url_for('root'))
     
     return render_template("account_update.html", form=form)
+
+@app.route("/edit_article/<int:article_id>", methods=["GET", "POST"])
+@login_required
+def edit_article(article_id):
+    
+    # check if exists and then if the current user is the author of the article
+    """
+    article = Article.query.get_or_404(article_id)
+    if article:
+        if article.author != current_user:
+            abort(403)
+    """
+    # or more simply filter article and user at the same time
+    article = Article.query.filter_by(id=article_id, author=current_user).first_or_404()
+    # we use the same form of new article because fields are the same
+     # Pre-filling the fields with the found article's data
+    form = NewArticleForm(article_title=article.article_title, article_body=article.article_body)
+    #we should check the method of request
+    if request.method == "POST" and form.validate_on_submit(): 
+        # we update the fetched article
+        article.article_title = form.article_title.data
+        article.article_body = form.article_body.data
+
+        db.session.commit()
+        
+        flash(f"Το άρθρο με τίτλο <b>{article.article_title}</b> ενημερώθηκε με επιτυχία", "success")
+
+        return redirect (url_for("root"))
+    
+    return render_template("new_article.html", form=form)

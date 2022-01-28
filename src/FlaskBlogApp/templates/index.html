@@ -4,17 +4,18 @@
 {% endblock title %}
 {% block content %}
 
-    {% if current_user.is_authenticated %}
-        {{ current_user }}
-    {% endif %}
-
     {% if articles %}
     <ul>
         {% for article in articles %}
         <li>
+            <img  class="image-responsive a_image" src="{{ url_for('static', filename='images/articles_images/'+article.article_image) }}" 
+            alt="{{ article.article_title }}"
+            title="{{ article.article_title }}"
+            width="640px height=360px">
+            <br>
             [ {{ article.date_created.strftime('%d-%m-%Y') }} ]<br>
             {{ article.article_title }}<br>
-            {{ article.article_body | truncate(255) }}<br> <!-- jinja filter truncate to cut the size of article body-->
+            {{ article.article_body | truncate(255) | safe }}<br> <!-- jinja filter truncate to cut the size of article body, safe to parse as html-->
             {{ article.author.username }}<br>
         </li>
         {% endfor %}
