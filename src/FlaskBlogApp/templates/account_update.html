@@ -9,6 +9,10 @@
             <div class="col-md-6 login-form-1">
 
                 <h3>Φόρμα Ενημέρωσης Λογαριασμού</h3>
+
+                <img  class="rounded-circle navbar-profile_image" src="{{ url_for('static', filename='images/profiles_images/'+current_user.profile_image) }}" alt="{{ current_user.username }}"
+                data-holder-rendered="true" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="{{ current_user.username }}">
                 
                 <form action="#" method="POST">
 
