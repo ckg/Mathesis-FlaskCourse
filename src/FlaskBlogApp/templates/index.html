@@ -20,7 +20,9 @@
             </div>
             <div class="col col-md-12">
               <div class="main-article-title">
-                <a class="article_title" href="#">{{ article.article_title | safe }}</a>
+                <a class="article_title" 
+                href="{{ url_for('full_article', article_id=article.id) }}">{{ article.article_title | safe }}
+                </a>
               </div>
               <small class="article_date">[{{ article.date_created.strftime('%d-%m-%Y') }}]</small>
               <p class="main-article-partial-text">
