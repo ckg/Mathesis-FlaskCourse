@@ -20,6 +20,14 @@
                     {{ article.article_title | safe }}
                 </div>
                 <small class="article_date">[{{ article.date_created.strftime('%d-%m-%Y') }}]</small>
+                
+                <div>
+                    {% if article.author == current_user %}
+                      <a class="btn btn-primary btn-sm mt-1 mb-1" href="{{ url_for('edit_article', article_id=article.id) }}">Αλλαγή</a>
+                      <button type="button" class="btn btn-danger btn-sm m-1" data-bs-toggle="modal" data-bs-target="#deleteModal">Διαγραφή</button>
+                    {% endif %}
+                  </div>
+                
                 <p class="main-article-partial-text">
                     {{ article.article_body | safe }}
                 </p>
@@ -36,5 +44,27 @@
             <hr>
         {% endif %}
     </main>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Διαγραφή Άρθρου</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            Είστε σίγουρος/η ότι θέλετε να διαγράψετε αυτό το άρθρο;
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Όχι</button>
+            <form action="{{ url_for('delete_article', article_id=article.id) }}" method="POST">
+                <input type="submit" class="btn btn-danger" value="Διαγραφή Άρθρου">
+            </form>
+            
+            </div>
+        </div>
+        </div>
+    </div>
 
 {% endblock content %}

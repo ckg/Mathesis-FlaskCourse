@@ -97,12 +97,29 @@ def new_article():
         flash(f"Το άρθρο με τίτλο {article.article_title} δημιουργήθηκε με επιτυχία", "success")
         return redirect(url_for('root'))
 
-    return render_template("new_article.html", form=form)
+    return render_template("new_article.html", form=form, page_title="Εισαγωγή Νέου Άρθρου")
 
 @app.route("/full_article/<int:article_id>", methods=["GET"])
 def full_article(article_id):
     article = Article.query.get_or_404(article_id)
     return render_template("full_article.html", article=article)
+
+@app.route("/delete_article/<int:article_id>", methods=["GET", "POST"])
+@login_required
+def delete_article(article_id):
+    article = Article.query.filter_by(id=article_id, author=current_user).first_or_404()
+    if article: # it is not needed really because we use first_or_404
+        db.session.delete(article)
+        db.session.commit()
+
+        flash(f"Το άρθρο με τίτλο {article.article_title} διαγράφηκε με επιτυχία", "success")
+
+        return redirect(url_for('root'))
+   
+    flash(f"Το άρθρο δεν βρέθηκε", "warning")
+    return redirect(url_for('root'))
+
+
 
 @app.route("/account/", methods=["GET", "POST"])
 @login_required # User must login to see this page
@@ -153,5 +170,5 @@ def edit_article(article_id):
 
         return redirect (url_for("root"))
     
-    return render_template("new_article.html", form=form)
+    return render_template("new_article.html", form=form, page_title="Επεξεργασία Άρθρου")
 
