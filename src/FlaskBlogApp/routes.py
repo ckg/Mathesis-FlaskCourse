@@ -14,6 +14,14 @@ def root():
     articles = Article.query.order_by(Article.date_created.desc())
     return render_template("index.html", articles=articles)
 
+@app.route("/articles_by_author/<int:author_id>")
+def articles_by_author(author_id):
+    user = User.query.get_or_404(author_id)
+    # we bring all the articles written by the specific user
+    articles = Article.query.filter_by(author=user).order_by(Article.date_created.desc())
+    
+    return render_template("articles_by_author.html", articles=articles, author=user)
+
 @app.route("/signup/", methods=["GET", "POST"])
 def signup():
 
