@@ -1,14 +1,26 @@
+from typing import Optional
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed #file field and validator is a special case that uses binary data   
 from wtforms import StringField, SubmitField, TextAreaField, BooleanField
-from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError, Optional
 from FlaskBlogApp.models import User
 from flask_login import  current_user
 
 # Custom validator for email outside class-1st way for creating custom validator
-def validate_email(form, email): #form ans not self because we are outside form class
+def validate_email(form, email): #form and not self because we are outside form class
    email = User.query.filter_by(email=email.data).first() # takes the username from the form
    if email:
          raise ValidationError("Αυτό το email υπάρχει ήδη")
+
+# Custom validator for max file size outside class
+def maxImageSize(max_size=2): #2MB but form understands bytes so we need to transform it below
+   max_bytes = max_size * 1024 * 1024
+   #create an internal method so we start the name with underscore
+   def _check_file_size(form, field): #we use not specific field name because we will use it on different forms
+      if len(field.data.read()) > max_bytes:
+         raise ValidationError(f"Το μέγεθος της εικόνας δεν μπορει να υπερβαίνει τα {max_size} MB")
+
+   return _check_file_size #because as validator we call the outside function and not the internal      
 
 class SignupForm(FlaskForm):
    username = StringField(label='Username', 
@@ -103,6 +115,15 @@ class AccountUpdateForm(FlaskForm):
                               Email(message="Παρακαλώ εισάγετε ένα σωστό email"),
                         ]
                       )
+   
+   profile_image = FileField('Εικόνα Προφίλ',
+                              validators=[
+                                 Optional(strip_whitespace=True),
+                                 FileAllowed(['jpg', 'jpeg', 'png'], 
+                                             'Επιτρέπονται μόνο αρχεία εικόνων τύπου jpg, jpeg και png!'),
+                                 maxImageSize(max_size=3)
+                              ] 
+                           )
 
 
    # Custom validator for username inside class-2nd way for creating custom validator
