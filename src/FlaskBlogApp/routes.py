@@ -6,6 +6,28 @@ from FlaskBlogApp.forms import SignupForm, LoginForm, NewArticleForm, AccountUpd
 from FlaskBlogApp import app, db, bcrypt
 from FlaskBlogApp.models import User, Article
 from flask_login import login_user, current_user, logout_user, login_required
+import secrets, os
+from PIL import Image # for Pillow library(manipulate images)
+
+#for image manipulation
+def image_save(image, where, size): # size is of tuple form (640,480)
+    #create a (2*12)char token < 30 that we set on models-db.strings
+    random_file_name = secrets.token_hex(12)
+    #to split name and extension
+    _, file_extension = os.path.splitext(image.filename)
+    #create new random name
+    image_filename = random_file_name + file_extension
+    # create the absolute path to save the file
+    image_path = os.path.join(app.root_path, 'static/images', where, image_filename)
+    # open resize and save image
+    img = Image.open(image)
+    img.thumbnail(size) #thumbnail or resize
+    img.save(image_path)
+
+    # we return the filename so we can import it to database on routes.py
+    return image_filename
+
+
 
 @app.route ("/index/")
 @app.route ("/")
@@ -142,8 +164,10 @@ def account():
         current_user.username = form.username.data
         current_user.email = form.email.data
 
-        profile_image = form.profile_image.data
-        print(profile_image)
+        # image_save(image, where, size) returns the image_filename
+        image_file = image_save(form.profile_image.data, 'profiles_images', (150, 150))
+
+        current_user.profile_image = image_file
 
         db.session.commit()
 
