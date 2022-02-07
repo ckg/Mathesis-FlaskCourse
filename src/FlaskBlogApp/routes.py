@@ -164,11 +164,22 @@ def account():
         current_user.username = form.username.data
         current_user.email = form.email.data
 
-        # image_save(image, where, size) returns the image_filename
-        image_file = image_save(form.profile_image.data, 'profiles_images', (150, 150))
+        
+        if form.profile_image.data:
+            #we keep the old image path in order to delete the old image later from the storage
+            old_image_path = os.path.join(app.root_path, 'static/images', 'profiles_images', current_user.profile_image)
+            
+            try: #because someone may bypass the validator and upload a file of another file type but with the right extension
+                # image_save(image, where, size) returns the image_filename
+                image_file = image_save(form.profile_image.data, 'profiles_images', (150, 150))
+                current_user.profile_image = image_file
 
-        current_user.profile_image = image_file
+                #we remove the old image from the storage
+                os.remove(old_image_path)
+            except:
+                abort(415) # Unsupported Media Type (RFC 7231)
 
+            
         db.session.commit()
 
         flash(f"Ο λογαριασμός του χρήστη <b>{current_user.username}</b> ενημερώθηκε με επιτυχία", "success")
