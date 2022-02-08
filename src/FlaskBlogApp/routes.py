@@ -113,14 +113,30 @@ def new_article():
     if request.method == "POST" and form.validate_on_submit(): 
         article_title = form.article_title.data
         article_body = form.article_body.data
-        #print(article_title, article_body)
-
-        #Instanciate an article using models
-        article = Article(article_title=article_title,
+        
+        if form.article_image.data:
+            
+            try: #because someone may bypass the validator and upload a file of another file type but with the right extension
+                # image_save(image, where, size) returns the image_filename
+                image_file = image_save(form.article_image.data, 'articles_images', (640, 360))
+            except:
+                abort(415) # Unsupported Media Type (RFC 7231)
+            
+            #Instanciate an article using models
+            article = Article(article_title=article_title,
                          article_body=article_body,
-                         author=current_user
-                         ) # We pass the whole user object to the author backreference but another way could be user_id=current_user.id
-        #add aricle to database
+                         author=current_user, 
+                         article_image = image_file
+                         )
+
+            
+        else:
+            #Instanciate an article with an image using models
+            article = Article(article_title=article_title,
+                            article_body=article_body,
+                            author=current_user
+                            ) # We pass the whole user object to the author backreference but another way could be user_id=current_user.id
+        #add article to database
         db.session.add(article)
         #commit changes to database
         db.session.commit()
@@ -209,6 +225,24 @@ def edit_article(article_id):
         # we update the fetched article
         article.article_title = form.article_title.data
         article.article_body = form.article_body.data
+
+        if form.article_image.data:
+            
+            #we keep the old image path in order to delete the old image later from the storage
+            old_image_path = os.path.join(app.root_path, 'static/images', 'articles_images', article.article_image)
+            
+            try: #because someone may bypass the validator and upload a file of another file type but with the right extension
+                # image_save(image, where, size) returns the image_filename
+                image_file = image_save(form.article_image.data, 'articles_images', (640, 360))
+
+                #we remove the old image from the storage
+                os.remove(old_image_path)
+            except:
+                abort(415) # Unsupported Media Type (RFC 7231)
+            
+            # We change or add to an existing article
+            article.article_image = image_file
+
 
         db.session.commit()
         

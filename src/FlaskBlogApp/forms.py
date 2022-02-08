@@ -99,6 +99,16 @@ class NewArticleForm(FlaskForm):
                                ]
                        )
 
+   article_image = FileField('Εικόνα Άρθρου',
+                              validators=[
+                                 Optional(strip_whitespace=True),
+                                 FileAllowed(['jpg', 'jpeg', 'png'], 
+                                             'Επιτρέπονται μόνο αρχεία εικόνων τύπου jpg, jpeg και png!'),
+                                 maxImageSize(max_size=3)
+                              ] 
+                           )
+
+
    submit = SubmitField(label="Υποβολή")
 
 class AccountUpdateForm(FlaskForm):
