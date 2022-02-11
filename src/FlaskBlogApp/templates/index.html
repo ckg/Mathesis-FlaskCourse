@@ -9,7 +9,7 @@
 {% block content %}
 
   {% if articles %}
-      {% for article in articles %}
+      {% for article in articles.items %} <!--.items to make it iterable fro pagination-->
 
           
           <div class="row my-3 p-3 bg-body rounded shadow-sm">
@@ -40,9 +40,20 @@
 
           <hr>
           
-
       {% endfor %}
 
+      {% for page_number in articles.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_number %}
+          {% if articles.page == page_number %} <!--To outline the page we are curently in-->
+            <a class="btn btn-primary" href="{{ url_for('root', page=page_number) }}"> {{ page_number }} </a>
+          {% else %}
+            <a class="btn btn-outline-primary" href="{{ url_for('root', page=page_number) }}"> {{ page_number }} </a>
+
+          {% endif%}
+        {% else %}
+          <span>...</span>
+        {% endif %}
+      {% endfor %}
 
   {% endif %}
 

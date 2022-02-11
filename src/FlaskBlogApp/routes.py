@@ -32,16 +32,21 @@ def image_save(image, where, size): # size is of tuple form (640,480)
 @app.route ("/index/")
 @app.route ("/")
 def root():
+    #we get the page number from ?page=<user input>
+    page = request.args.get("page", 1, type=int) # default page=1, type=integer
     #articles = Article.query.all()
-    articles = Article.query.order_by(Article.date_created.desc())
+    articles = Article.query.order_by(Article.date_created.desc()).paginate(per_page=2, page=page) #to show only 2 articles per page
     return render_template("index.html", articles=articles)
 
 @app.route("/articles_by_author/<int:author_id>")
 def articles_by_author(author_id):
     user = User.query.get_or_404(author_id)
-    # we bring all the articles written by the specific user
-    articles = Article.query.filter_by(author=user).order_by(Article.date_created.desc())
     
+    #we get the page number from ?page=<user input>
+    page = request.args.get("page", 1, type=int) # default page=1, type=integer
+    # we bring all the articles written by the specific user
+    articles = Article.query.filter_by(author=user).order_by(Article.date_created.desc()).paginate(per_page=2, page=page) #to show only 2 articles per page
+
     return render_template("articles_by_author.html", articles=articles, author=user)
 
 @app.route("/signup/", methods=["GET", "POST"])
