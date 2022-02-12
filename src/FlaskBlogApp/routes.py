@@ -9,6 +9,16 @@ from flask_login import login_user, current_user, logout_user, login_required
 import secrets, os
 from PIL import Image # for Pillow library(manipulate images)
 
+# for custom error pages
+@app.errorhandler(404)
+def page_not_found(e): #the method has to have the name of the error
+    # note that we set the 404 status explicitly
+    return render_template('errors/404.html'), 404
+@app.errorhandler(415)
+def unsupported_media_type(e): #the method has to have the name of the error
+    # note that we set the 415 status explicitly
+    return render_template('errors/415.html'), 415
+
 #for image manipulation
 def image_save(image, where, size): # size is of tuple form (640,480)
     #create a (2*12)char token < 30 that we set on models-db.strings
